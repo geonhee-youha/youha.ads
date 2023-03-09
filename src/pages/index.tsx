@@ -300,7 +300,7 @@ function Main() {
                         bottom: 0,
                         // color: "transparent !important",
                         // WebkitTextStroke: `1px #ffffff`,
-                        color: mainColor[500],
+                        // color: mainColor[500],
                         transform: `translateY(100%)`,
                         transitionDelay: `2.5s`,
                         "&.shown": {
