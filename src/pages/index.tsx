@@ -1,8 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import Container from "../components/atoms/Container";
-import { BeltBanner } from "../components/organisms/BeltBanner";
-import { mainColor, theme } from "../themes/theme";
+import { theme } from "../themes/theme";
 import dynamic from "next/dynamic";
 import { useInView } from "react-intersection-observer";
 import { grey } from "@mui/material/colors";
