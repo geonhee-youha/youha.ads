@@ -25,6 +25,7 @@ export function BeltBanner() {
         top: 64,
         left: 0,
         right: 0,
+        width: '100%',
         height: 40,
         display: "flex",
         backgroundColor: alpha(mainColor[500], 0.6),

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { theme } from "../../themes/theme";
+import Border from "../atoms/Border";
 import Container from "../atoms/Container";
 import Icon from "../atoms/Icon";
 import Toolbar from "../atoms/Toolbar";
@@ -50,7 +51,7 @@ export default function GlobalHeader() {
             cursor: "pointer",
             "&:hover": {
               "& *": {
-                color: grey[600],
+                color: grey[400],
               },
             },
             "@media(max-width: 480px)": {
@@ -77,8 +78,7 @@ export default function GlobalHeader() {
         position: "fixed",
         top: 0,
         width: "100%",
-        backgroundColor: `rgba(0, 0, 0, 0.6)`,
-        transition: `all 0.35s ease`,
+        transition: `background 0.35s ease`,
         display: focused ? "block" : "none",
         zIndex: 99,
       }}
@@ -127,7 +127,7 @@ export default function GlobalHeader() {
                   borderRadius: "50%",
                   "&:hover": {
                     "& svg": {
-                      color: grey[600],
+                      color: grey[400],
                     },
                   },
                 }}
@@ -141,6 +141,7 @@ export default function GlobalHeader() {
           </Box>
         </Toolbar>
       </Container>
+      <Border />
     </Box>
   );
 }

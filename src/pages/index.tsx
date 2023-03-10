@@ -1,47 +1,159 @@
 import { Box, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import Container from "../components/atoms/Container";
 import { theme } from "../themes/theme";
 import dynamic from "next/dynamic";
 import { useInView } from "react-intersection-observer";
 import { grey } from "@mui/material/colors";
 import Button from "../components/atoms/Button";
+import { BeltBanner } from "../components/organisms/BeltBanner";
+import MainNav from "../components/organisms/MainNav";
+import _ from "lodash";
 
 const ReactPlayer = dynamic(() => import("react-player/lazy"), { ssr: false });
 
 export default function Index() {
+  const [ready, setReady] = useState<boolean>(false);
   useEffect(() => {
     const handleScroll = () => {
+      let sectionHeights = [0, 0, 0, 0];
       const scrollY = window.scrollY;
+      const Intro: HTMLDivElement | null = document.querySelector(`.Intro`);
       const GlobalHeader: HTMLDivElement | null =
         document.querySelector(`.GlobalHeader`);
+      const GlobalHeaderBorderLeft: HTMLDivElement | null =
+        document.querySelector(`.GlobalHeader .BorderLeft`);
+      const GlobalHeaderBorderCenter: HTMLDivElement | null =
+        document.querySelector(`.GlobalHeader .BorderCenter`);
+      const GlobalHeaderBorderRight: HTMLDivElement | null =
+        document.querySelector(`.GlobalHeader .BorderRight`);
       const Background: HTMLDivElement | null =
         document.querySelector(`.Background`);
-      if (GlobalHeader !== null && Background !== null) {
+      const MainNav: HTMLDivElement | null = document.querySelector(`.MainNav`);
+      const MainNavLine: HTMLDivElement | null =
+        document.querySelector(`.MainNavLine`);
+      const MainNavBorderLeft: HTMLDivElement | null =
+        document.querySelector(`.MainNav .BorderLeft`);
+      const MainNavBorderRight: HTMLDivElement | null = document.querySelector(
+        `.MainNav .BorderRight`
+      );
+      if (
+        GlobalHeader !== null &&
+        Background !== null &&
+        GlobalHeaderBorderLeft !== null &&
+        GlobalHeaderBorderCenter !== null &&
+        GlobalHeaderBorderRight !== null &&
+        MainNav !== null &&
+        MainNavLine !== null &&
+        MainNavBorderLeft !== null &&
+        MainNavBorderRight !== null
+      ) {
         const targetScrollPoint = 400;
-        GlobalHeader.style.backgroundColor = `rgba(0, 0, 0, ${
-          scrollY / targetScrollPoint
-        })`;
+        const MainNavScrollTop = MainNavLine.getBoundingClientRect().top;
+        if (scrollY > 0) {
+          GlobalHeader.style.background = `rgba(21, 21, 21, 0.6)`;
+          GlobalHeader.style.backdropFilter = `blur(4px)`;
+          GlobalHeaderBorderLeft.style.left = `0%`;
+          GlobalHeaderBorderRight.style.right = `0%`;
+          if (MainNavScrollTop <= 64) {
+            GlobalHeaderBorderLeft.style.opacity = `0`;
+            GlobalHeaderBorderCenter.style.opacity = `0`;
+            GlobalHeaderBorderRight.style.opacity = `0`;
+            MainNavBorderLeft.style.left = `0%`;
+            MainNavBorderRight.style.right = `0%`;
+            MainNav.style.position = "fixed";
+            MainNav.style.top = "64px";
+            MainNav.style.left = "0";
+            MainNav.style.right = "0";
+            MainNav.style.background = `rgba(21, 21, 21, 0.6)`;
+            MainNav.style.backdropFilter = `blur(4px)`;
+          } else {
+            GlobalHeaderBorderLeft.style.opacity = `1`;
+            GlobalHeaderBorderCenter.style.opacity = `1`;
+            GlobalHeaderBorderRight.style.opacity = `1`;
+            MainNavBorderLeft.style.left = `100%`;
+            MainNavBorderRight.style.right = `100%`;
+            MainNav.style.position = "relative";
+            MainNav.style.top = "initial";
+            MainNav.style.left = "initial";
+            MainNav.style.right = "initial";
+            MainNav.style.background = `rgba(0, 0, 0, 1)`;
+            MainNav.style.backdropFilter = `blur(0px)`;
+          }
+        } else {
+          GlobalHeader.style.background = `rgba(0, 0, 0, 0)`;
+          GlobalHeader.style.backdropFilter = `blur(0px)`;
+          GlobalHeaderBorderLeft.style.left = `100%`;
+          GlobalHeaderBorderRight.style.right = `100%`;
+        }
         Background.style.opacity = `${
           (targetScrollPoint - scrollY) / targetScrollPoint
         }`;
       }
+      const Sections: NodeListOf<HTMLDivElement> =
+        document.querySelectorAll(`.Section`);
+      const NavBtns: NodeListOf<HTMLDivElement> =
+        document.querySelectorAll(`.NavBtn`);
+      if (Intro !== null) {
+        for (let i = 0; i < Sections.length; i += 1) {
+          const IntroHeight = Intro.offsetHeight;
+          sectionHeights[0] = IntroHeight;
+          const Section: HTMLDivElement = Sections[i];
+          sectionHeights[i + 1] = Section.offsetHeight;
+          const prevHeights = sectionHeights.slice(0, i + 1);
+          const targetHeights = sectionHeights.slice(0, i + 2);
+          const prevHeight = prevHeights.reduce(function add(a, b) {
+            return a + b;
+          }, 0);
+          const sumHeight = targetHeights.reduce(function add(a, b) {
+            return a + b;
+          }, 0);
+          const allHeight = sectionHeights.reduce(function add(a, b) {
+            return a + b;
+          }, 0);
+          if (
+            scrollY + 64 + 44 >= prevHeight &&
+            scrollY + 64 + 44 < sumHeight
+          ) {
+            NavBtns[i].style.opacity = `1`;
+          } else {
+            NavBtns[i].style.opacity = `0.4`;
+            if (scrollY <= sectionHeights[1]) {
+              NavBtns[0].style.opacity = `1`;
+            }
+            if (scrollY + 64 + 44 >= allHeight) {
+              NavBtns[Sections.length - 1].style.opacity = `1`;
+            }
+          }
+        }
+      }
     };
     window.addEventListener("scroll", handleScroll);
+    window.addEventListener(`resize`, handleScroll);
+    handleScroll();
     return () => {
       window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
     };
   }, []);
 
   return (
     <>
-      <Background />
-      <Content />
+      <Background setReady={setReady} />
+      <Content ready={ready} />
+      <Footer />
     </>
   );
 }
 
-function Background() {
+function Background({
+  setReady,
+}: {
+  setReady: Dispatch<SetStateAction<boolean>>;
+}) {
+  const onVideoReady = () => {
+    setReady(true);
+  };
   return (
     <Box
       sx={{
@@ -49,6 +161,7 @@ function Background() {
         width: "100%",
         height: 0,
         p: theme.spacing(`100vh`, 0, 0, 0),
+        zIndex: -1,
         "& video": {
           position: "absolute",
           top: 0,
@@ -67,6 +180,7 @@ function Background() {
         muted
         loop
         playsinline
+        onReady={onVideoReady}
       />
       <Box
         sx={{
@@ -82,7 +196,7 @@ function Background() {
   );
 }
 
-function Content() {
+function Content({ ready }: { ready: boolean }) {
   return (
     <Box
       sx={{
@@ -92,17 +206,19 @@ function Content() {
       }}
     >
       {/* <BeltBanner /> */}
+      <Intro ready={ready} />
+      <MainNav />
       <Main />
     </Box>
   );
 }
 
-function Main() {
+function Intro({ ready }: { ready: boolean }) {
   const { ref, inView } = useInView();
   const [className, setClassName] = useState<string>("");
   useEffect(() => {
-    setClassName("shown");
-  }, [inView]);
+    if (ready) setClassName("shown");
+  }, [inView, ready]);
   const tempPress = () => {
     setClassName(className !== "" ? "" : "shown");
   };
@@ -113,8 +229,14 @@ function Main() {
         width: "100%",
         height: 0,
         p: theme.spacing(`800px`, 0, 0, 0),
+        zIndex: -1,
+        "@media(max-width: 480px)": {
+          p: theme.spacing(`640px`, 0, 0, 0),
+        },
       }}
+      onClick={tempPress}
       ref={ref}
+      className="Intro"
     >
       <Box
         sx={{
@@ -169,6 +291,9 @@ function Main() {
                 "&.shown": {
                   transform: `translate(-50%, -50%)`,
                 },
+                "@media(max-width: 480px)": {
+                  width: 172,
+                },
               }}
               className={className}
             >
@@ -210,7 +335,6 @@ function Main() {
                   m: theme.spacing(0, 0, 0.5, 0),
                 }}
                 className={className}
-                onClick={tempPress}
               >
                 <img src="logos/shorts-horizontal.png" />
                 <Box
@@ -255,7 +379,7 @@ function Main() {
                     fontWeight: "900",
                   }}
                 >
-                  미디어 광고를
+                  광고의 역사를
                 </Typography>
                 <Box
                   sx={{
@@ -270,7 +394,8 @@ function Main() {
                       fontWeight: "900",
                       position: "relative",
                       m: theme.spacing(0, 1, 0, 0),
-                      overflow: "hidden",
+                      overflowX: "visible",
+                      overflowY: "hidden",
                       "& *": {
                         transition: `all 1s ease`,
                       },
@@ -286,9 +411,11 @@ function Main() {
                         bottom: 0,
                         color: `#ffffff`,
                         transform: `translateY(0)`,
-                        transitionDelay: `2.5s`,
+                        opacity: 1,
                         "&.shown": {
+                          opacity: 0,
                           transform: `translateY(-100%)`,
+                          transitionDelay: `2.5s`,
                         },
                       },
                       "& .vertical": {
@@ -297,20 +424,21 @@ function Main() {
                         left: 0,
                         right: 0,
                         bottom: 0,
-                        // color: "transparent !important",
-                        // WebkitTextStroke: `1px #ffffff`,
-                        // color: mainColor[500],
                         transform: `translateY(100%)`,
-                        transitionDelay: `2.5s`,
+                        color: `transparent`,
+                        WebkitTextStroke: `1px #ffffff`,
+                        opacity: 0,
                         "&.shown": {
+                          opacity: 1,
                           transform: `translateY(0)`,
+                          transitionDelay: `2.5s`,
                         },
                       },
                     }}
                   >
                     <span className={`none`}>세로 </span>
                     <span className={`horizontal ${className}`}>새로 </span>
-                    <span className={`vertical ${className}`}>세로 </span>
+                    <span className={`vertical ${className}`}>세로</span>
                   </Typography>
                   <Typography
                     sx={{
@@ -320,7 +448,7 @@ function Main() {
                       fontWeight: "900",
                     }}
                   >
-                    쓰자
+                    쓰다
                   </Typography>
                 </Box>
               </Box>
@@ -338,11 +466,11 @@ function Main() {
                       color: grey[400],
                       transform: `translateY(100%)`,
                       transition: `all 0.5s ease`,
-                      transitionDelay: `1s`,
                       opacity: 0,
                       "&.shown": {
                         opacity: 1,
                         transform: `translateY(0)`,
+                        transitionDelay: `1s`,
                       },
                     }}
                     className={className}
@@ -362,11 +490,11 @@ function Main() {
                       color: grey[400],
                       transform: `translateY(100%)`,
                       transition: `all 0.5s ease`,
-                      transitionDelay: `1.5s`,
                       opacity: 0,
                       "&.shown": {
                         opacity: 1,
                         transform: `translateY(0)`,
+                        transitionDelay: `1.5s`,
                       },
                     }}
                     className={className}
@@ -374,46 +502,77 @@ function Main() {
                     No.1 유하에서 만나보세요.
                   </Typography>
                 </Box>
-                <Box
-                  sx={{
-                    position: "absolute",
-                    left: 0,
-                    right: 0,
-                    bottom: 56,
-                    overflow: "hidden",
-                  }}
-                >
-                  <Button
-                    sx={{
-                      m: theme.spacing(3, 0, 0, 0),
-                      transform: `translateY(100%)`,
-                      transition: `all 0.5s ease`,
-                      transitionDelay: `2s`,
-                      opacity: 0,
-                      "&.shown": {
-                        opacity: 1,
-                        transform: `translateY(0)`,
-                      },
-                    }}
-                    className={className}
-                  >
-                    지금 바로 문의하기
-                  </Button>
-                </Box>
               </Box>
+            </Box>
+            <Box
+              sx={{
+                position: "absolute",
+                left: 0,
+                right: 0,
+                bottom: 56,
+                overflow: "hidden",
+                "@media(max-width: 480px)": {
+                  bottom: 120,
+                },
+              }}
+            >
+              <Button
+                sx={{
+                  m: theme.spacing(3, 0, 0, 0),
+                  transition: `all 1s ease`,
+                  transitionDelay: `0s`,
+                  opacity: 0,
+                  "&.shown": {
+                    opacity: 1,
+                  },
+                }}
+                className={className}
+              >
+                지금 바로 문의하기
+              </Button>
             </Box>
           </Box>
         </Container>
       </Box>
-      <Box
-        sx={{
-          backgroundColor: `#000000`,
-          width: "100%",
-          height: `2000px`,
-        }}
-      >
-        <Container></Container>
-      </Box>
     </Box>
   );
+}
+
+function Main() {
+  return (
+    <Box
+      sx={{
+        backgroundColor: `#000000`,
+        width: "100%",
+      }}
+    >
+      <Section index={0}>1</Section>
+      <Section index={1}>2</Section>
+      <Section index={2}>3</Section>
+      <Section index={3}>4</Section>
+    </Box>
+  );
+}
+
+function Section({
+  index,
+  children,
+}: {
+  index: number;
+  children?: React.ReactNode;
+}) {
+  return (
+    <Box
+      sx={{
+        height: 1000,
+      }}
+      className={`Section Section${index}`}
+    >
+      <Container>{children}</Container>
+    </Box>
+  );
+}
+
+function Footer() {
+  return <Box sx={{ height: 1000 }} />;
 }

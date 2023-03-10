@@ -5,9 +5,11 @@ import { theme } from "../../themes/theme";
 export default function Container({
   children,
   sx,
+  className,
 }: {
   children?: React.ReactNode;
   sx?: SxProps;
+  className?: string | undefined;
 }) {
   return (
     <Box
@@ -22,6 +24,7 @@ export default function Container({
         },
         ...sx,
       }}
+      className={className}
     >
       {children}
     </Box>
