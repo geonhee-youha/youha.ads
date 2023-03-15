@@ -8,6 +8,7 @@ import Border from "../atoms/Border";
 import Container from "../atoms/Container";
 import Icon from "../atoms/Icon";
 import Toolbar from "../atoms/Toolbar";
+import { BeltBanner } from "./BeltBanner";
 
 const headers = [
   {
@@ -84,6 +85,7 @@ export default function GlobalHeader() {
       }}
       className="GlobalHeader"
     >
+       <BeltBanner />
       <Container>
         <Toolbar>
           <Box

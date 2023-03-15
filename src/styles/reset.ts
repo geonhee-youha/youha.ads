@@ -264,7 +264,7 @@ const reset = css`
     color: #263238;
     scroll-behavior: smooth;
     letter-spacing: -0.4px !important;
-    background-color: #000000;
+    background-color: #111111;
   }
   * {
     box-sizing: border-box;

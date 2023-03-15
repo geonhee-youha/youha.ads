@@ -58,7 +58,7 @@
     "sharp": "^0.30.6",
     "slick-carousel": "^1.8.1",
     "styled-system": "^5.1.5",
-    "swiper": "^8.3.0",
+    "swiper": "^9.1.0",
     "swr": "^1.0.1",
     "typescript": "4.9.5"
   },

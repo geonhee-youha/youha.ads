@@ -18,25 +18,44 @@ export function BeltBanner() {
       timerRef.current = null;
     }
   };
+  const onClickButton = (e: any) => {
+    e.stopPropagation();
+    const element: HTMLDivElement | null = document.querySelector(
+      `.Section${3}`
+    );
+    const BeltBanner: HTMLDivElement | null =
+      document.querySelector(`.BeltBanner`);
+    const BeltBannerHeight = BeltBanner?.offsetHeight ?? 0;
+    if (element !== null) {
+      window.scrollTo({
+        top: element.offsetTop - 64 - 44 - BeltBannerHeight,
+        left: 0,
+        behavior: "smooth",
+      });
+    }
+  };
   return (
     <Box
       sx={{
-        position: 'absolute',
-        top: 64,
-        left: 0,
-        right: 0,
-        width: '100%',
-        height: 40,
+        width: "100%",
         display: "flex",
-        backgroundColor: alpha(mainColor[500], 0.6),
-        zIndex: 9
+        backgroundColor: alpha(mainColor[500], 1),
+        zIndex: 9,
       }}
+      className='BeltBanner'
+      onClick={onClickButton}
     >
       <Container
         sx={{
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
+          height: 40,
+          "@media(max-width: 480px)": {
+            justifyContent: "center",
+            flexDirection: "column",
+            height: 56,
+          },
         }}
       >
         <ButtonBase onClick={handleStop}>
@@ -79,7 +98,7 @@ export function BeltBanner() {
 }
 
 function getTime() {
-  const targetDate = dayjs("2023-03-12:13:02:00+0900");
+  const targetDate = dayjs("2023-03-20:13:02:00+0900");
   const nowDate = dayjs(new Date());
   const diff = targetDate.diff(nowDate);
   const date: any = document.querySelector(".date");

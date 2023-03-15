@@ -5,24 +5,24 @@ import Container from "../atoms/Container";
 
 const navs = [
   {
-    title: "쇼츠 효과",
+    title: "서비스 소개",
     type: "default",
     className: "first",
   },
   {
-    title: "최근 쇼츠",
+    title: "유하 소개",
     type: "default",
     className: "second",
   },
   {
-    title: "기간 내 혜택",
+    title: "사용후기",
     type: "default",
     className: "third",
   },
   {
     title: "문의하기",
     type: "default",
-    className: "fourth",
+    className: "fifth",
   },
 ];
 
@@ -39,9 +39,12 @@ export default function MainNav() {
       const element: HTMLDivElement | null = document.querySelector(
         `.Section${index}`
       );
+      const BeltBanner: HTMLDivElement | null =
+        document.querySelector(`.BeltBanner`);
+      const BeltBannerHeight = BeltBanner?.offsetHeight ?? 0;
       if (element !== null) {
         window.scrollTo({
-          top: element.offsetTop - 64 - 44,
+          top: element.offsetTop - 64 - 44 - BeltBannerHeight,
           left: 0,
           behavior: "smooth",
         });
@@ -81,7 +84,14 @@ export default function MainNav() {
     );
   }
   return (
-    <Box sx={{ width: "100%", position: "relative", height: 44 }}>
+    <Box
+      sx={{
+        width: "100%",
+        position: "relative",
+        height: 44,
+        zIndex: 99,
+      }}
+    >
       <Box
         sx={{
           position: "absolute",
@@ -93,7 +103,6 @@ export default function MainNav() {
       />
       <Box
         sx={{
-          backgroundColor: `#000000`,
           transition: `background 0.35s ease`,
         }}
         className="MainNav"
@@ -103,9 +112,16 @@ export default function MainNav() {
             display: "flex",
           }}
         >
-          {navs.map((item, index) => (
-            <NavBtn key={index} index={index} item={item} />
-          ))}
+          <Box
+            sx={{
+              display: "flex",
+              overflowX: "scroll",
+            }}
+          >
+            {navs.map((item, index) => (
+              <NavBtn key={index} index={index} item={item} />
+            ))}
+          </Box>
         </Container>
         <Border />
       </Box>

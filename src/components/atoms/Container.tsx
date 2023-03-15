@@ -6,10 +6,12 @@ export default function Container({
   children,
   sx,
   className,
+  onClick,
 }: {
   children?: React.ReactNode;
   sx?: SxProps;
   className?: string | undefined;
+  onClick?: React.MouseEventHandler<HTMLButtonElement> | undefined;
 }) {
   return (
     <Box
@@ -25,6 +27,7 @@ export default function Container({
         ...sx,
       }}
       className={className}
+      onClick={onClick}
     >
       {children}
     </Box>
