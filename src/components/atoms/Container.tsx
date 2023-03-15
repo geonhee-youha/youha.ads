@@ -11,7 +11,7 @@ export default function Container({
   children?: React.ReactNode;
   sx?: SxProps;
   className?: string | undefined;
-  onClick?: React.MouseEventHandler<HTMLButtonElement> | undefined;
+  onClick?: React.MouseEventHandler<HTMLDivElement> | undefined;
 }) {
   return (
     <Box
