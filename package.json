@@ -21,6 +21,7 @@
     "@mui/material": "^5.0.3",
     "@mui/x-date-pickers": "^5.0.0-alpha.6",
     "@mui/x-date-pickers-pro": "^5.0.7",
+    "@sketchfab/viewer-api": "^1.12.1",
     "@types/date-fns": "^2.6.0",
     "@types/lodash": "^4.14.179",
     "@types/react-copy-to-clipboard": "^5.0.2",

@@ -768,6 +768,11 @@
   resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-0.14.0.tgz#9fb3a3cf3132328151f353de4632e01e52102bea"
   integrity sha512-9NET910DNaIPngYnLLPeg+Ogzqsi9uM4mSboU5y6p8S5DzMTVEsJZrawi+BoDNUVBa2DhJqQYUFvMDfgU062LQ==
 
+"@sketchfab/viewer-api@^1.12.1":
+  version "1.12.1"
+  resolved "https://registry.yarnpkg.com/@sketchfab/viewer-api/-/viewer-api-1.12.1.tgz#df4331107f9009e0dedb28f88ec4e2c467e5520e"
+  integrity sha512-rLRWBbY8xbuJSx+AlpCwu9KZu0cBzZAhE/NsNVqmWMaLTXUr8wpigZCNvA4DCwvKkJVjaDjgnI6dUZkYqWVP7A==
+
 "@styled-system/background@^5.1.2":
   version "5.1.2"
   resolved "https://registry.yarnpkg.com/@styled-system/background/-/background-5.1.2.tgz#75c63d06b497ab372b70186c0bf608d62847a2ba"

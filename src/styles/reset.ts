@@ -247,7 +247,7 @@ const reset = css`
   }
   html {
     // width: 100vw !important;
-    /* background-color: #f5f5f5; */
+    background-color: #ffffff;
     -webkit-font-smoothing: antialiased;
     box-sizing: border-box;
     text-size-adjust: 100%;
@@ -264,7 +264,7 @@ const reset = css`
     color: #263238;
     scroll-behavior: smooth;
     letter-spacing: -0.4px !important;
-    background-color: #111111;
+    background-color: #ffffff;
   }
   * {
     box-sizing: border-box;

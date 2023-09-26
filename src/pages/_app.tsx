@@ -9,7 +9,6 @@ import { fad } from "@fortawesome/pro-duotone-svg-icons";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import { RecoilRoot } from "recoil";
 import "../styles/index.css";
-import "../styles/reset.ts";
 import "swiper/css";
 import "swiper/css/effect-cards";
 import "swiper/css/effect-coverflow";
@@ -232,7 +231,7 @@ function MyApp(props: MyAppProps) {
                 width: "100%",
               }}
             > */}
-          <GlobalHeader />
+          {/* <GlobalHeader /> */}
           <Component {...pageProps} key={router.route} />
           {/* </Box>
           </Box> */}

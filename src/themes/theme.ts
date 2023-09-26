@@ -10,7 +10,7 @@ import {
 import youtubeRed from "../constants/youtubeRed";
 export const theme = createTheme({
   palette: {
-    mode: "dark",
+    mode: "light",
     primary: red,
     secondary: purple,
     grey: grey,
@@ -31,7 +31,7 @@ export const theme = createTheme({
     MuiTypography: {
       styleOverrides: {
         root: {
-          color: '#ffffff',
+          color: grey[900],
           fontFamily: `LINESeedKR, Pretendard, -apple-system, BlinkMacSystemFont, system- ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo","Noto Sans KR", "Malgun Gothic", sans- serif`,
         }
       }
