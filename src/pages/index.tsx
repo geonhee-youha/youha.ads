@@ -63,15 +63,15 @@ function Youtuber({ index, item }: { index: number; item: YoutuberProps }) {
     },
     {
       label: "조회수/구독자",
-      value: `${(item.quantity.viewsPerSubscribers * 100).toFixed(0)}%`,
+      value: `${(item.quantity.viewsPerSubscribers * 100).toFixed(2)}%`,
     },
     {
       label: "좋아요/조회수",
-      value: `${item.quantity.likesPerViews.toFixed(2)}%`,
+      value: `${(item.quantity.likesPerViews * 100).toFixed(2)}%`,
     },
     {
       label: "댓글/조회수",
-      value: `${item.quantity.commentsPerViews.toFixed(2)}%`,
+      value: `${(item.quantity.commentsPerViews * 100).toFixed(2)}%`,
     },
   ];
   return (
@@ -195,13 +195,7 @@ function Youtuber({ index, item }: { index: number; item: YoutuberProps }) {
           >
             {item.score.toFixed(1)}
           </Typography>
-          <Rating
-            name="read-only"
-            value={item.score}
-            readOnly
-            sx={{
-            }}
-          />
+          <Rating name="read-only" value={item.score} readOnly sx={{}} />
         </Stack>
         <Stack direction={"row"} spacing={2}>
           {datas.map((item, index) => {
