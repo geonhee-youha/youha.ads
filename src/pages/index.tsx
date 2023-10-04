@@ -1,4 +1,4 @@
-import { Box, ButtonBase, Stack, Typography } from "@mui/material";
+import { Box, ButtonBase, Rating, Stack, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import Visual from "../components/atoms/Visual";
 import { theme } from "../themes/theme";
@@ -7,18 +7,10 @@ import { comma } from "../utils";
 import { grey } from "@mui/material/colors";
 import youhaBlue from "../constants/youhaBlue";
 import Icon from "../components/atoms/Icon";
+import { YoutuberProps, youtubers } from "../data";
+import Link from "next/link";
+import _ from "lodash";
 
-const youtuber = {
-  thumbnail:
-    "https://yt3.ggpht.com/ytc/APkrFKaUNDH3mgVQtM87zcunIb4elVrj687hnSzrd82Qlg=s800-c-k-c0x00ffffff-no-rj",
-  category: "Vlog · 일상",
-  title: "인애킴",
-  subscribers: 7840,
-  averageViews: 26800,
-  viewsPerSubscribers: 0.1529,
-  likesPerViews: 0.0205,
-  commentsPerViews: 0.0014,
-};
 type TagProps = {
   label: string;
   backgroundColor: string;
@@ -59,33 +51,33 @@ function Tag({ size, item }: { size?: string; item: string }) {
   );
 }
 
-function Youtuber() {
+function Youtuber({ index, item }: { index: number; item: YoutuberProps }) {
   const datas = [
     {
       label: "구독자수",
-      value: `${comma(youtuber.subscribers)}명`,
+      value: `${comma(item.quantity.subscribers)}명`,
     },
     {
       label: "평균 조회수",
-      value: `${comma(youtuber.averageViews)}회`,
+      value: `${comma(item.quantity.averageViews)}회`,
     },
     {
       label: "조회수/구독자",
-      value: `${(youtuber.viewsPerSubscribers * 100).toFixed(2)}%`,
+      value: `${(item.quantity.viewsPerSubscribers * 100).toFixed(0)}%`,
     },
     {
       label: "좋아요/조회수",
-      value: `${(youtuber.likesPerViews * 100).toFixed(2)}%`,
+      value: `${item.quantity.likesPerViews.toFixed(2)}%`,
     },
     {
       label: "댓글/조회수",
-      value: `${(youtuber.commentsPerViews * 100).toFixed(2)}%`,
+      value: `${item.quantity.commentsPerViews.toFixed(2)}%`,
     },
   ];
-  const tags: string[] = ["일상", "패션", "뷰티", "여행"];
   return (
     <Box
       sx={{
+        maxHeight: `113px`,
         boxShadow: `0 0 0 1px ${grey[300]} inset`,
         borderRadius: 2,
         p: theme.spacing(1.5, 2),
@@ -106,11 +98,11 @@ function Youtuber() {
           m: theme.spacing(0, 2, 0, 0),
         }}
       >
-        100
+        {index + 1}
       </Typography>
       <Box sx={{ position: "relative", m: theme.spacing(0, 2, 0, 0) }}>
         <Visual
-          src="https://yt3.ggpht.com/ytc/APkrFKaUNDH3mgVQtM87zcunIb4elVrj687hnSzrd82Qlg=s800-c-k-c0x00ffffff-no-rj"
+          src={item.thumbnail}
           sx={{
             width: 76,
             height: 76,
@@ -119,27 +111,35 @@ function Youtuber() {
             border: `1px solid ${grey[300]}`,
           }}
         />
-        <ButtonBase
-          sx={{
-            position: "absolute",
-            right: 0,
-            bottom: 0,
-            zIndex: 999,
-            backgroundColor: `#ffffff`,
-            width: 32,
-            height: 32,
-            borderRadius: 20,
-            justifyContent: "center",
-            alignItems: "center",
-            "& img": {
-              width: "auto",
-              height: `20px`,
-            },
-            border: `1px solid ${grey[300]}`,
-          }}
-        >
-          <img src="/images/youtube.svg" />
-        </ButtonBase>
+        <Link href={`https://www.youtube.com/channel/${item.id}`} passHref>
+          <a
+            target="_blank"
+            href={`https://www.youtube.com/channel/${item.id}`}
+            rel="noopener noreferrer"
+          >
+            <ButtonBase
+              sx={{
+                position: "absolute",
+                right: 0,
+                bottom: 0,
+                zIndex: 999,
+                backgroundColor: `#ffffff`,
+                width: 32,
+                height: 32,
+                borderRadius: 20,
+                justifyContent: "center",
+                alignItems: "center",
+                "& img": {
+                  width: "auto",
+                  height: `20px`,
+                },
+                border: `1px solid ${grey[300]}`,
+              }}
+            >
+              <img src="/images/youtube.svg" />
+            </ButtonBase>
+          </a>
+        </Link>
       </Box>
       <Box sx={{ flex: 1 }}>
         <Typography
@@ -148,7 +148,7 @@ function Youtuber() {
             lineHeight: "16px",
           }}
         >
-          Vlog · 일상
+          {item.category}
         </Typography>
         <Typo
           lines={2}
@@ -159,7 +159,7 @@ function Youtuber() {
             m: theme.spacing(0.25, 0, 0, 0),
           }}
         >
-          인애킴
+          {item.title}
         </Typo>
         <Stack
           direction="row"
@@ -168,32 +168,34 @@ function Youtuber() {
             m: theme.spacing(1, 0, 0, 0),
           }}
         >
-          {tags.map((item, index) => {
+          {item.tags.map((item, index) => {
             return <Tag key={index} item={item} size="md" />;
           })}
         </Stack>
       </Box>
       <Box>
-        <Typography
+        <Stack
+          direction={"row"}
+          alignItems={"center"}
+          spacing={1}
           sx={{
-            fontSize: 12,
-            lineHeight: "24px",
-            color: grey[900],
             p: theme.spacing(0, 0, 1, 0),
             m: theme.spacing(0, 0, 1, 0),
             borderBottom: `1px solid ${grey[200]}`,
-            "& span": {
-              fontSize: 20,
-              color: youhaBlue[500],
-              fontWeight: "700",
-              m: theme.spacing(0, 1, 0, 0),
-            },
-            fontWeight: "700",
           }}
         >
-          <span>78점</span>
-          유하 적합도
-        </Typography>
+          <Typography
+            sx={{
+              fontSize: 20,
+              lineHeight: "32px",
+              fontWeight: "700",
+              color: youhaBlue[500],
+            }}
+          >
+            {item.score.toFixed(1)}
+          </Typography>
+          <Rating name="read-only" value={item.score} readOnly />
+        </Stack>
         <Stack direction={"row"} spacing={2}>
           {datas.map((item, index) => {
             return (
@@ -228,6 +230,8 @@ function Youtuber() {
 
 export default function Index() {
   const router = useRouter();
+  const youtuberList = _.chunk(youtubers, 10);
+
   return (
     <Box
       sx={{
@@ -239,7 +243,7 @@ export default function Index() {
         sx={{
           height: 1080,
           display: "flex",
-          flexDirection: 'column',
+          flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
         }}
@@ -297,11 +301,38 @@ export default function Index() {
               },
             }}
           >
-            총 지원자 : <b>122</b> / 30명
+            총 지원자 : <b>{youtubers.length}</b> / 30명
           </Typography>
         </Stack>
       </Box>
-      <Box
+      {youtuberList.map((item, index) => {
+        console.log(item);
+        return (
+          <Box
+            key={index}
+            sx={{
+              display: "grid",
+              gridTemplateColumns: "1fr",
+              gridAutoRows: "1fr",
+              gridTemplateRows: "auto auto",
+              gridColumnGap: 16,
+              gridRowGap: `8px`,
+              p: theme.spacing(2, 0),
+            }}
+          >
+            {item.map((item2, index2) => {
+              return (
+                <Youtuber
+                  key={index2}
+                  index={index * 10 + index2}
+                  item={item2}
+                />
+              );
+            })}
+          </Box>
+        );
+      })}
+      {/* <Box
         sx={{
           display: "grid",
           gridTemplateColumns: "1fr",
@@ -322,29 +353,7 @@ export default function Index() {
         <Youtuber />
         <Youtuber />
         <Youtuber />
-      </Box>
-      <Box
-        sx={{
-          display: "grid",
-          gridTemplateColumns: "1fr",
-          gridAutoRows: "1fr",
-          gridTemplateRows: "auto auto",
-          gridColumnGap: 16,
-          gridRowGap: `8px`,
-          p: theme.spacing(2, 0),
-          height: '1080px',
-        }}
-      >
-        <Youtuber />
-        <Youtuber />
-        <Youtuber />
-        <Youtuber />
-        <Youtuber />
-        <Youtuber />
-        <Youtuber />
-        <Youtuber />
-        <Youtuber />
-      </Box>
+      </Box> */}
     </Box>
   );
 }
