@@ -182,19 +182,26 @@ function Youtuber({ index, item }: { index: number; item: YoutuberProps }) {
             p: theme.spacing(0, 0, 1, 0),
             m: theme.spacing(0, 0, 1, 0),
             borderBottom: `1px solid ${grey[200]}`,
+            maxHeight: `32px !important`,
           }}
         >
           <Typography
             sx={{
               fontSize: 20,
-              lineHeight: "32px",
+              lineHeight: "24px",
               fontWeight: "700",
               color: youhaBlue[500],
             }}
           >
             {item.score.toFixed(1)}
           </Typography>
-          <Rating name="read-only" value={item.score} readOnly />
+          <Rating
+            name="read-only"
+            value={item.score}
+            readOnly
+            sx={{
+            }}
+          />
         </Stack>
         <Stack direction={"row"} spacing={2}>
           {datas.map((item, index) => {
@@ -316,8 +323,8 @@ export default function Index() {
               gridAutoRows: "1fr",
               gridTemplateRows: "auto auto",
               gridColumnGap: 16,
-              gridRowGap: `8px`,
-              p: theme.spacing(2, 0),
+              gridRowGap: `4px`,
+              p: theme.spacing(2.25, 0),
             }}
           >
             {item.map((item2, index2) => {
